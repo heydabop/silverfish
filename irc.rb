@@ -58,8 +58,23 @@ out = Thread.new{
         puts "SEND: PRIVMSG #minecraft :*rrrgghh*"
         irc.puts "PRIVMSG #minecraft :*rrrgghh*"
       end
+      if command == "players"
+        players = %x[/home/ross/bin/mcrcon -H 127.0.0.1 -p rossroll1234 -P 20155 list]
+        players.sub!(":", ": ")
+        players.rstrip!
+        puts "SEND: PRIVMSG #minecraft :#{players}"
+        irc.puts "PRIVMSG #minecraft :#{players}"
+      end
     end
   end
 }
 
+console_in = Thread.new{
+  while input = gets
+    puts "SEND: PRIVMSG #minecraft :#{input}"
+    irc.puts "PRIVMSG #minecraft :#{input}"
+  end
+}
+
 out.join
+console_in.join
