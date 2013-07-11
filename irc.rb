@@ -8,10 +8,6 @@ def tsputs (string)
 end
 
 module Irc
-  def Irc.method_missing(method, *args)
-    tsputs "ERROR: No command called #{method}"
-  end
-
   #require all from commands directory
   Dir["./commands/*.rb"].each {|file| require file}
 end
@@ -70,7 +66,11 @@ out = Thread.new{
     unless %r{PRIVMSG #[[:alnum:]]+ :&}.match(line) == nil
       index = line.index('&') + 1
       command = line[index..line.length].split(' ')[0]
-      Irc.send(command, irc)
+      if Irc.method_defined? command
+        Irc.send(command, irc)
+      else
+        tsputs "ERROR: No command called #{command}"
+      end
     end
   end
 }
