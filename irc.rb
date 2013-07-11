@@ -66,7 +66,7 @@ out = Thread.new{
     unless %r{PRIVMSG #[[:alnum:]]+ :&}.match(line) == nil
       index = line.index('&') + 1
       command = line[index..line.length].split(' ')[0]
-      if Irc.method_defined? command
+      if Irc.respond_to? command
         Irc.send(command, irc)
       else
         tsputs "ERROR: No command called #{command}"
