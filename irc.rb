@@ -77,8 +77,8 @@ out = Thread.new{
 
 console_in = Thread.new{
   while input = gets
-    tsputs "SEND: PRIVMSG #minecraft :#{input}"
-    irc.puts "PRIVMSG #minecraft :#{input}"
+    tsputs "SEND: #{input}"
+    irc.puts input
   end
 }
 
