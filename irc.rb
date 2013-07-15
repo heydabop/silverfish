@@ -2,6 +2,10 @@
 
 require 'socket'
 
+AUTH_USERS = ["heydabop"]
+
+init_channels = ["#minecraft"]
+
 #puts with appended timestamp
 def tsputs (string)
   puts "#{Time.now.strftime("%F %T")} #{string}"
@@ -10,14 +14,6 @@ end
 module Irc
   #require all from commands directory
   Dir["./commands/*.rb"].each {|file| require file}
-end
-
-#join channels
-def join (socket, channels)
-  for channel in channels
-    tsputs "SEND: JOIN ##{channel}"
-    socket.puts "JOIN ##{channel}"
-  end
 end
 
 def identify (socket, passwd)
@@ -31,10 +27,6 @@ def pong (socket, server)
   socket.puts "PONG #{server}"
 end
 
-
-
-channels = ["minecraft"]
-
 irc = TCPSocket.new 'irc.tamu.edu', 6667
 
 tsputs "SEND: NICK silvrfish"
@@ -47,7 +39,7 @@ while line = irc.gets
   tsputs line
   if line.include? "001"
     identify irc, "ichaizeu"
-    join irc, channels
+    Irc.join irc, "heydabop", "null_channel", init_channels #2nd arg must be in Irc.auth_users
     break
   end
 end
@@ -64,10 +56,24 @@ out = Thread.new{
     end
     #listen for commands, regex to watch for line beginning with &
     unless %r{PRIVMSG #[[:alnum:]]+ :&}.match(line) == nil
+      #extract nick
+      index = line.index(':') + 1
+      end_index = line.index('!') - 1
+      nick = line[index..end_index]
+      #end
+      #extract chan
+      index = line.index("PRIVMSG") + 8
+      chan = line[index..line.length]
+      end_index = chan.index(' ') - 1
+      chan = chan[0..end_index]
+      #extract command and args
       index = line.index('&') + 1
       command = line[index..line.length].split(' ')[0]
+      command_args = line[index..line.length].split(' ')
+      command_args.delete_at(0)
+      #end
       if Irc.respond_to? command
-        Irc.send(command, irc)
+        Irc.send(command, irc, nick, chan, command_args)
       else
         tsputs "ERROR: No command called #{command}"
       end
