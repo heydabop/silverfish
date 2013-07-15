@@ -5,6 +5,6 @@ def Irc.help(socket, nick, channel, args)
     method = method.upcase
     commands = "#{commands} #{method}"
   end
-  tsputs "SEND: PRIVMSG #minecraft :#{commands}"
-  socket.puts "PRIVMSG #minecraft :#{commands}"
+  tsputs "SEND: PRIVMSG #{channel} :#{commands}"
+  socket.puts "PRIVMSG #{channel} :#{commands}"
 end
