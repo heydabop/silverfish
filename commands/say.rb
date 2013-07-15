@@ -1,4 +1,4 @@
-def Irc.say(socket, nick, channel, args)
+def Commands.say(socket, nick, channel, args)
   line = ""
   for word in args
     line = "#{line}#{word} "

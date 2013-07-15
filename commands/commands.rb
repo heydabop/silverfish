@@ -1,5 +1,5 @@
-def Irc.commands(socket, nick, channel, args)
-  methods = Irc.methods - Module.methods #there's probably a better way to do this
+def Commands.commands(socket, nick, channel, args)
+  methods = Commands.methods - Module.methods #there's probably a better way to do this
   commands = ""
   methods.each do |method|
     method.upcase!

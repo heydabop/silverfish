@@ -11,7 +11,7 @@ def tsputs (string)
   puts "#{Time.now.strftime("%F %T")} #{string}"
 end
 
-module Irc
+module Commands
   #require all from commands directory
   Dir["./commands/*.rb"].each {|file| require file}
 end
@@ -39,7 +39,7 @@ while line = irc.gets
   tsputs line
   if line.include? "001"
     identify irc, "ichaizeu"
-    Irc.join irc, "heydabop", "null_channel", init_channels #2nd arg must be in Irc.auth_users
+    Commands.join irc, "heydabop", "null_channel", init_channels #2nd arg must be in Commands.auth_users
     break
   end
 end
@@ -72,10 +72,11 @@ out = Thread.new{
       command_args = line[index..line.length].split(' ')
       command_args.delete_at(0)
       #end
-      if Irc.respond_to? command
-        Irc.send(command, irc, nick, chan, command_args)
+      if Commands.respond_to? command
+        Commands.send(command, irc, nick, chan, command_args)
       else
-        tsputs "ERROR: No command called #{command}"
+        tsputs "SEND: NOTICE #{nick} :#{command} is not a valid command."
+        irc.puts "NOTICE #{nick} :#{command} is not a valid command."
       end
     end
   end
