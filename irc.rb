@@ -56,7 +56,6 @@ out = Thread.new{
     end
     #listen for commands, regex to watch for line beginning with & or for PMs
     unless %r{PRIVMSG #[[:alnum:]]+ :&}.match(line) == nil && %r{PRIVMSG [[:alnum:]]+ :}.match(line) == nil
-      tsputs "REGEX"
       #extract nick
       index = line.index(':') + 1
       end_index = line.index('!') - 1
@@ -86,6 +85,7 @@ out = Thread.new{
         command_args.delete_at(0)
         #end
       end
+      command.downcase! #case insensitivity
       if Commands.respond_to? command
         Commands.send(command, irc, nick, chan, command_args)
       else
