@@ -39,12 +39,15 @@ def Commands.playtime(socket, nick, channel, args) #args[0] should be username
     hours = hours % 24
   end
 
+  s_hours = hours.to_s.rjust(2, '0')
+  s_minutes = minutes.to_s.rjust(2, '0')
+  s_seconds = seconds.to_s.rjust(2, '0')
   if connected
-    tsputs "SEND: PRIVMSG #{channel} :#{user}'s playtime: #{days} days: #{hours}:#{minutes}:#{seconds} and counting..."
-    socket.puts "PRIVMSG #{channel} :#{user}'s playtime: #{days} days: #{hours}:#{minutes}:#{seconds} and counting..."
+    tsputs "SEND: PRIVMSG #{channel} :#{user}'s playtime: #{days} days: #{s_hours}:#{s_minutes}:#{s_seconds} and counting..."
+    socket.puts "PRIVMSG #{channel} :#{user}'s playtime: #{days} days: #{s_hours}:#{s_minutes}:#{s_seconds} and counting..."
   else
-    tsputs "SEND: PRIVMSG #{channel} :#{user}'s playtime: #{days} days: #{hours}:#{minutes}:#{seconds}"
-    socket.puts "PRIVMSG #{channel} :#{user}'s playtime: #{days} days: #{hours}:#{minutes}:#{seconds}"
+    tsputs "SEND: PRIVMSG #{channel} :#{user}'s playtime: #{days} days: #{s_hours}:#{s_minutes}:#{s_seconds}"
+    socket.puts "PRIVMSG #{channel} :#{user}'s playtime: #{days} days: #{s_hours}:#{s_minutes}:#{s_seconds}"
   end
 end
     
