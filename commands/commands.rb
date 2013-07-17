@@ -3,8 +3,7 @@ def Commands.commands(socket, nick, channel, args)
   methods.sort!
   commands = ""
   methods.each do |method|
-    method.upcase!
-    commands = "#{commands}#{method} "
+    commands = "#{commands}#{method.to_s.upcase!} "
   end
   tsputs "SEND: PRIVMSG #{channel} :#{commands}"
   socket.puts "PRIVMSG #{channel} :#{commands}"
