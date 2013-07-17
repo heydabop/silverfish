@@ -54,8 +54,9 @@ out = Thread.new{
       pong irc, server
       next
     end
-    #listen for commands, regex to watch for line beginning with &
-    unless %r{PRIVMSG #[[:alnum:]]+ :&}.match(line) == nil
+    #listen for commands, regex to watch for line beginning with & or for PMs
+    unless %r{PRIVMSG #[[:alnum:]]+ :&}.match(line) == nil && %r{PRIVMSG [[:alnum:]]+ :}.match(line) == nil
+      tsputs "REGEX"
       #extract nick
       index = line.index(':') + 1
       end_index = line.index('!') - 1
@@ -66,12 +67,25 @@ out = Thread.new{
       chan = line[index..line.length]
       end_index = chan.index(' ') - 1
       chan = chan[0..end_index]
-      #extract command and args
-      index = line.index('&') + 1
-      command = line[index..line.length].split(' ')[0]
-      command_args = line[index..line.length].split(' ')
-      command_args.delete_at(0)
       #end
+      #extract command and args
+      if chan == "silvrfish" #is a PM
+        chan = nick #respond with PM
+        index = line.index(':', 2) + 1
+        command = line[index..line.length].split(' ')[0]
+        if command[0] == '&' #delete escape char if used
+          command.slice!(0)
+        end
+        command_args = line[index..line.length].split(' ')
+        command_args.delete_at(0)
+      else #find command escape char
+        #extract command and args
+        index = line.index('&') + 1
+        command = line[index..line.length].split(' ')[0]
+        command_args = line[index..line.length].split(' ')
+        command_args.delete_at(0)
+        #end
+      end
       if Commands.respond_to? command
         Commands.send(command, irc, nick, chan, command_args)
       else
