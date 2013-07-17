@@ -1,10 +1,4 @@
 def Commands.help(socket, nick, channel, args)
-  methods = Commands.methods - Module.methods #there's probably a better way to do this
-  commands = ""
-  methods.each do |method|
-    method = method.upcase
-    commands = "#{commands} #{method}"
-  end
-  tsputs "SEND: PRIVMSG #{channel} :#{commands}"
-  socket.puts "PRIVMSG #{channel} :#{commands}"
+  tsputs "SEND: PRIVMSG #{channel} :Prefix commands in channel with &, or /msg command (prefix optional). Try &COMMANDS"
+  socket.puts "PRIVMSG #{channel} :Prefix commands in channel with &, or /msg command (prefix optional). Try &COMMANDS"
 end
