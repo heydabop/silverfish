@@ -2,6 +2,7 @@
 
 require 'socket'
 require 'pp'
+require './mcrcon.rb'
 
 AUTH_USERS = ["heydabop"]
 

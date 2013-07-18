@@ -1,5 +1,5 @@
 def Commands.players(socket, nick, channel, args)
-  players = %x[/home/ross/bin/mcrcon -H 127.0.0.1 -p rossroll1234 -P 20155 list]
+  players = %x[/home/ross/bin/mcrcon -H #{MC_HOST} -p #{MC_PASS} -P #{MC_PORT} list]
   players.sub!(":", ": ")
   players.rstrip!
   tsputs "SEND: PRIVMSG #{channel} :#{players}"

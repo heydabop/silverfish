@@ -1,6 +1,16 @@
 def Commands.playtime(socket, nick, channel, args) #args[0] should be username
   require 'time' #expands core-time
+  user = args[0]
+  if user.length > 16
+    raise("ERROR: Invalid username, length exceeds 16 characters.")
+  end
 
+  for i in 0..user.length #sanitize input
+    if /\w/.match(user[i]) == nil
+      raise("ERROR: Invalid username, contains non-word characters.")
+    end
+  end
+  
   seconds = 0
   minutes = 0
   hours = 0
@@ -12,7 +22,7 @@ def Commands.playtime(socket, nick, channel, args) #args[0] should be username
 
   log = File.new("/home/ross/ftb/server.log")
   log.each_line {|line|
-    if %r{ \[INFO\] User (?i:#{user}) connecting}.match(line) != nil
+    if !connected && %r{ \[INFO\] User (?i:#{user}) connecting}.match(line) != nil
       connectTime = Time.parse(line[0...line.index(" [INFO] ")])
       connected = true
     elsif connected && %r{ \[INFO\] (?i:#{user}) lost connection}.match(line) != nil
@@ -50,5 +60,6 @@ def Commands.playtime(socket, nick, channel, args) #args[0] should be username
     socket.puts "PRIVMSG #{channel} :#{user}'s playtime: #{days} days: #{s_hours}:#{s_minutes}:#{s_seconds}"
   end
 end
-    
+
+  
   
