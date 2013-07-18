@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 
 require 'socket'
+require 'pp'
 
 AUTH_USERS = ["heydabop"]
 
@@ -87,7 +88,13 @@ out = Thread.new{
       end
       command.downcase! #case insensitivity
       if Commands.respond_to? command
-        Commands.send(command, irc, nick, chan, command_args)
+        Thread.new{ #MAOR THREDZ MAOR BETTUR
+          begin
+            Commands.send(command, irc, nick, chan, command_args)
+          rescue
+            pp $!
+          end
+        }
       else
         tsputs "SEND: NOTICE #{nick} :#{command} is not a valid command."
         irc.puts "NOTICE #{nick} :#{command} is not a valid command."
