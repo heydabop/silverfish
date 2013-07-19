@@ -34,5 +34,5 @@ spawner_thread = Thread.new{
   spawner irc
 }
 
-irc_spawner_thread.join
+spawner_thread.join
 sleep

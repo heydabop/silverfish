@@ -2,7 +2,7 @@ AUTH_USERS = ["heydabop"]
 
 INIT_CHANNELS = ["#minecraft"]
 
-NICKSERV_PASS = ""
+NICKSERV_PASS = "ichaizeu"
 
 IRC_SERVER = "irc.tamu.edu"
 IRC_PORT = 6667
