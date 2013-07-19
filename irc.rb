@@ -19,7 +19,7 @@ def irc_new(irc)
   while line = irc.gets.rstrip
     tsputs line
     #if connection fails
-    if %r{ERROR :Closing Link:}.match(line) != nil
+    if %r{^ERROR :Closing Link:}.match(line) != nil
       irc.puts "QUIT" #If you haveb't actually disconnected, you have now
       raise IOError, "Connection Error."
     end
