@@ -76,6 +76,9 @@ out = Thread.new{
           messages = Array.new
           while message.length > 100
             endIndex = message[0..99].rindex(' ')
+            if endIndex == nil
+              endIndex = 99
+            end
             messages.push(message.slice!(0..endIndex))
           end
           messages.each {|msg| system(%Q(/home/ross/bin/mcrcon -H #{MC_HOST} -p #{MC_PASS} -P #{MC_PORT} "say <#{nick}> #{msg}"))}
