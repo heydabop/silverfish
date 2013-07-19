@@ -22,10 +22,10 @@ def Commands.playtime(socket, nick, channel, args) #args[0] should be username
 
   log = File.new("/home/ross/ftb/server.log")
   log.each_line {|line|
-    if !connected && %r{ \[INFO\] User (?i:#{user}) connecting}.match(line) != nil
+    if !connected && %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] User (?i:#{user}) connecting}.match(line) != nil
       connectTime = Time.parse(line[0...line.index(" [INFO] ")])
       connected = true
-    elsif connected && %r{ \[INFO\] (?i:#{user}) lost connection}.match(line) != nil
+    elsif connected && %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] (?i:#{user}) lost connection}.match(line) != nil
       disconnectTime = Time.parse(line[0...line.index(" [INFO] ")])
       connected = false
       seconds += (disconnectTime - connectTime)

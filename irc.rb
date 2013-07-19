@@ -48,16 +48,15 @@ end
 
 #puts output
 out = Thread.new{
-  while line = irc.gets
+  while line = irc.gets.rstrip
     tsputs line
     #listen for a respond to pings
-    if line.include? "PING :"
+    if %r{^PING}.match(line) != nil
       server = line.split(':')[1]
       pong irc, server
       next
     end
-    #listen for commands, regex to watch for line beginning with & or for PMs
-    unless %r{PRIVMSG #[[:alnum:]]+ :&}.match(line) == nil && %r{PRIVMSG [[:alnum:]]+ :}.match(line) == nil
+    if line.include?("PRIVMSG") #chat message
       #extract nick
       index = line.index(':') + 1
       end_index = line.index('!') - 1
@@ -69,36 +68,43 @@ out = Thread.new{
       end_index = chan.index(' ') - 1
       chan = chan[0..end_index]
       #end
-      #extract command and args
-      if chan == "silvrfish" #is a PM
-        chan = nick #respond with PM
+      if chan == "#minecraft" #pipe to minecraft server
         index = line.index(':', 2) + 1
-        command = line[index..line.length].split(' ')[0]
-        if command[0] == '&' #delete escape char if used
-          command.slice!(0)
-        end
-        command_args = line[index..line.length].split(' ')
-        command_args.delete_at(0)
-      else #find command escape char
-        #extract command and args
-        index = line.index('&') + 1
-        command = line[index..line.length].split(' ')[0]
-        command_args = line[index..line.length].split(' ')
-        command_args.delete_at(0)
-        #end
+        system(%Q(/home/ross/bin/mcrcon -H #{MC_HOST} -p #{MC_PASS} -P #{MC_PORT} "say <#{nick}> #{line[index..line.length]}"))
       end
-      command.downcase! #case insensitivity
-      if Commands.respond_to? command
-        Thread.new{ #MAOR THREDZ MAOR BETTUR
-          begin
-            Commands.send(command, irc, nick, chan, command_args)
-          rescue
-            pp $!
+      #listen for commands, regex to watch for line beginning with & or for PMs
+      if %r{PRIVMSG #[[:alnum:]]+ :&}.match(line) != nil || %r{PRIVMSG [[:alnum:]]+ :}.match(line) != nil
+        #extract command and args
+        if chan == "silvrfish" #is a PM
+          chan = nick #respond with PM
+          index = line.index(':', 2) + 1
+          command = line[index..line.length].split(' ')[0]
+          if command[0] == '&' #delete escape char if used
+            command.slice!(0)
           end
-        }
-      else
-        tsputs "SEND: NOTICE #{nick} :#{command} is not a valid command."
-        irc.puts "NOTICE #{nick} :#{command} is not a valid command."
+          command_args = line[index..line.length].split(' ')
+          command_args.delete_at(0)
+        else #find command escape char
+          #extract command and args
+          index = line.index('&') + 1
+          command = line[index..line.length].split(' ')[0]
+          command_args = line[index..line.length].split(' ')
+          command_args.delete_at(0)
+          #end
+        end
+        command.downcase! #case insensitivity
+        if Commands.respond_to? command
+          Thread.new{ #MAOR THREDZ MAOR BETTUR
+            begin
+              Commands.send(command, irc, nick, chan, command_args)
+            rescue
+              pp $!
+            end
+          }
+        else
+          tsputs "SEND: NOTICE #{nick} :#{command} is not a valid command."
+          irc.puts "NOTICE #{nick} :#{command} is not a valid command."
+        end
       end
     end
   end
@@ -108,6 +114,38 @@ console_in = Thread.new{
   while input = gets
     tsputs "SEND: #{input}"
     irc.puts input
+  end
+}
+
+#minecraft to irc chat bridge
+mc_irc = Thread.new{
+  puts "START BRIDGE"
+  IO.popen "tail -n 0 -f /home/ross/ftb/server.log" do |log_tail|
+    until log_tail.eof?
+      line = log_tail.readline.rstrip
+      if %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] <\w+>}.match(line) != nil #chat message
+        index = line.index('<') + 1
+        endIndex = line.index('>')
+        nick = line[index...endIndex]
+        message = line[(endIndex+2)..line.length].rstrip
+        tsputs "SEND: PRIVMSG #minecraft :<#{nick}> #{message}"
+        irc.puts "PRIVMSG #minecraft :<#{nick}> #{message}"
+      end
+      if %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] User \w{,16} connecting}.match(line) != nil #join
+        index = line.index(" [INFO] User ") + 13
+        endIndex = line.index(" connecting ")
+        nick = line[index...endIndex]
+        tsputs "SEND: NOTICE #minecraft :#{nick} has joined"
+        irc.puts "NOTICE #minecraft :#{nick} has joined"
+      end
+      if %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] \w{,16} lost connection}.match(line) != nil #quit
+        index = line.index(" [INFO] ") + 8
+        endIndex = line.index(" lost connection:")
+        nick = line[index...endIndex]
+        tsputs "SEND: NOTICE #minecraft :#{nick} has disconnected"
+        irc.puts "NOTICE #minecraft :#{nick} has disconnected"
+      end
+    end
   end
 }
 
