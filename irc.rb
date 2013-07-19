@@ -41,7 +41,7 @@ def irc_new(irc)
       end_index = chan.index(' ') - 1
       chan = chan[0..end_index]
       #end
-      if chan == "#test" #pipe to minecraft server
+      if chan == "#minecraft" #pipe to minecraft server
         index = line.index(':', 2) + 1
         message = line[index..line.length]
         message.tr!(%q("), %q('))

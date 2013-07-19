@@ -7,9 +7,9 @@ def mc_irc irc
       endIndex = log_line.index('>')
       nick = log_line[index...endIndex]
       message = log_line[(endIndex+2)..log_line.length].rstrip
-      tsputs "SEND: PRIVMSG #test :<#{nick}> #{message}"
+      tsputs "SEND: PRIVMSG #minecraft :<#{nick}> #{message}"
       begin
-        irc.puts "PRIVMSG #test :<#{nick}> #{message}"
+        irc.puts "PRIVMSG #minecraft :<#{nick}> #{message}"
       rescue IOError => e
         puts e.message
       end
@@ -18,9 +18,9 @@ def mc_irc irc
       index = log_line.index(" [INFO] User ") + 13
       endIndex = log_line.index(" connecting ")
       nick = log_line[index...endIndex]
-      tsputs "SEND: NOTICE #test :#{nick} has joined"
+      tsputs "SEND: NOTICE #minecraft :#{nick} has joined"
       begin
-        irc.puts "NOTICE #test :#{nick} has joined"
+        irc.puts "NOTICE #minecraft :#{nick} has joined"
       rescue IOError => e
         puts e.message
       end
@@ -29,9 +29,9 @@ def mc_irc irc
       index = log_line.index(" [INFO] ") + 8
       endIndex = log_line.index(" lost connection:")
       nick = log_line[index...endIndex]
-      tsputs "SEND: NOTICE #test :#{nick} has disconnected"
+      tsputs "SEND: NOTICE #minecraft :#{nick} has disconnected"
       begin
-        irc.puts "NOTICE #test :#{nick} has disconnected"
+        irc.puts "NOTICE #minecraft :#{nick} has disconnected"
       rescue IOError => e
         puts e.message
       end
