@@ -1,3 +1,9 @@
+#pong server
+def pong (socket, server)
+  tsputs "SEND: PONG #{server}"
+  socket.puts "PONG #{server}"
+end
+
 def irc(irc_socket)
 
   tsputs "SEND: NICK silvrfish"

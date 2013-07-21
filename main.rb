@@ -23,12 +23,6 @@ def identify (socket, passwd)
   socket.puts "PRIVMSG NickServ :IDENTIFY #{passwd}"
 end
 
-#pong server
-def pong (socket, server)
-  tsputs "SEND: PONG #{server}"
-  socket.puts "PONG #{server}"
-end
-
 spawner_thread = Thread.new{
   spawner
 }
