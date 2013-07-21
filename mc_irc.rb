@@ -1,4 +1,4 @@
-def mc_irc irc
+def mc_irc irc_socket
   tail_process = IO.popen "tail -n 0 -f #{SERVER_LOG}"
   $tail_pid = tail_process.pid #init in main.rb, used in spawner.rb
   while log_line = tail_process.readline.rstrip
@@ -9,7 +9,7 @@ def mc_irc irc
       message = log_line[(endIndex+2)..log_line.length].rstrip
       tsputs "SEND: PRIVMSG #minecraft :<#{nick}> #{message}"
       begin
-        irc.puts "PRIVMSG #minecraft :<#{nick}> #{message}"
+        irc_socket.puts "PRIVMSG #minecraft :<#{nick}> #{message}"
       rescue IOError => e
         puts e.message
       end
@@ -20,7 +20,7 @@ def mc_irc irc
       nick = log_line[index...endIndex]
       tsputs "SEND: NOTICE #minecraft :#{nick} has joined"
       begin
-        irc.puts "NOTICE #minecraft :#{nick} has joined"
+        irc_socket.puts "NOTICE #minecraft :#{nick} has joined"
       rescue IOError => e
         puts e.message
       end
@@ -31,7 +31,7 @@ def mc_irc irc
       nick = log_line[index...endIndex]
       tsputs "SEND: NOTICE #minecraft :#{nick} has disconnected"
       begin
-        irc.puts "NOTICE #minecraft :#{nick} has disconnected"
+        irc_socket.puts "NOTICE #minecraft :#{nick} has disconnected"
       rescue IOError => e
         puts e.message
       end

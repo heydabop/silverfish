@@ -1,8 +1,8 @@
-def console_in(irc)
+def console_in(irc_socket)
   while input = gets
     tsputs "SEND: #{input}"
     begin
-      irc.puts input
+      irc_socket.puts input
     rescue IOError => e
       puts e.message
     end

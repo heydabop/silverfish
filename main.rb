@@ -4,6 +4,7 @@ require 'socket'
 require './mcrcon.rb'
 require './config.rb'
 require './spawner.rb'
+require './pass.rb'
 
 $tail_pid = 0 #i know, i know...
 
@@ -28,10 +29,8 @@ def pong (socket, server)
   socket.puts "PONG #{server}"
 end
 
-irc = TCPSocket.new IRC_SERVER, IRC_PORT
-
 spawner_thread = Thread.new{
-  spawner irc
+  spawner
 }
 
 spawner_thread.join
