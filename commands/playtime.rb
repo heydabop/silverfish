@@ -6,7 +6,7 @@ def Commands.playtime(socket, nick, channel, args) #args[0] should be username
   end
 
   if /\W/.match(user) != nil #sanitize input, check for non-word characters
-      raise("ERROR: Invalid username, contains non-word characters.")
+    raise("ERROR: Invalid username, contains non-word characters.")
   end
   
   seconds = 0
@@ -18,9 +18,9 @@ def Commands.playtime(socket, nick, channel, args) #args[0] should be username
   connectTime = Time.new
   disconnectTime = Time.new
 
-  log = File.new("/home/ross/ftb/server.log")
+  log = File.new(SERVER_LOG)
   log.each_line {|line|
-    if !connected && %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] User (?i:#{user}) connecting}.match(line) != nil
+    if !connected && %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] (?i:#{user})\[/[.:0-9]*\] logged in with entity id}.match(line) != nil
       connectTime = Time.parse(line[0...line.index(" [INFO] ")])
       connected = true
     elsif connected && %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] (?i:#{user}) lost connection}.match(line) != nil
