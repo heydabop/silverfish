@@ -18,7 +18,7 @@ def spawner
   rescue => e
     puts e.message
     mc_irc_thread.kill
-    #BUG: kill call makes zombie process
+    #BUG: kill call makes zombie process: maybe fix with detatch
     Process.detach($tail_pid)
     system(%Q(kill #{$tail_pid})) #global, initialized in main.rb, set in mc_irc.rb
     console_in_thread.kill
