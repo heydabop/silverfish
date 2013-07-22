@@ -6,6 +6,8 @@ end
 
 def irc(irc_socket)
 
+  tsputs "SEND: PASS #{NICKSERV_PASS}"
+  irc_socket.puts "PASS #{NICKSERV_PASS}"
   tsputs "SEND: NICK silvrfish"
   irc_socket.puts "NICK silvrfish"
   tsputs "SEND: USER silvrfish silverfish.0xkohen.com * :silvrfish"
