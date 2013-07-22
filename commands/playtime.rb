@@ -5,10 +5,8 @@ def Commands.playtime(socket, nick, channel, args) #args[0] should be username
     raise("ERROR: Invalid username, length exceeds 16 characters.")
   end
 
-  for i in 0..user.length #sanitize input
-    if /\w/.match(user[i]) == nil
+  if /\W/.match(user) != nil #sanitize input, check for non-word characters
       raise("ERROR: Invalid username, contains non-word characters.")
-    end
   end
   
   seconds = 0
