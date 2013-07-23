@@ -15,9 +15,9 @@ def mc_irc irc_socket
         puts e.backtrace.inspect
       end
     end
-    if %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] User \w{,16} connecting}.match(log_line) != nil #join
-      index = log_line.index(" [INFO] User ") + 13
-      endIndex = log_line.index(" connecting ")
+    if %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] (?i:#{user})\[/[.:0-9]*\] logged in with entity id}.match(log_line) != nil #join
+      index = log_line.index(" [INFO] ") + 8
+      endIndex = log_line.index("[/")
       nick = log_line[index...endIndex]
       tsputs "SEND: NOTICE #minecraft :#{nick} has joined"
       begin
