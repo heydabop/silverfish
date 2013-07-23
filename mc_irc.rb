@@ -12,6 +12,7 @@ def mc_irc irc_socket
         irc_socket.puts "PRIVMSG #minecraft :<#{nick}> #{message}"
       rescue IOError => e
         puts e.message
+        puts e.backtrace.inspect
       end
     end
     if %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] User \w{,16} connecting}.match(log_line) != nil #join
@@ -23,6 +24,7 @@ def mc_irc irc_socket
         irc_socket.puts "NOTICE #minecraft :#{nick} has joined"
       rescue IOError => e
         puts e.message
+        puts e.backtrace.inspect
       end
     end
     if %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] \w{,16} lost connection}.match(log_line) != nil #quit
@@ -34,6 +36,7 @@ def mc_irc irc_socket
         irc_socket.puts "NOTICE #minecraft :#{nick} has disconnected"
       rescue IOError => e
         puts e.message
+        puts e.backtrace.inspect
       end
     end
   end

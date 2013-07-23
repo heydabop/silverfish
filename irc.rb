@@ -1,11 +1,27 @@
+@@socket_mutex = Mutex.new
+
 #pong server
 def pong (socket, server)
   tsputs "SEND: PONG #{server}"
   socket.puts "PONG #{server}"
 end
 
-def irc(irc_socket)
+def identified?(socket, nick)
+  tsputs "SEND: PRIVMSG NickServ :info #{nick}"
+  socket.puts "PRIVMSG NickServ :info #{nick}"
+  nick_line = socket.gets.rstrip
+  tsputs(nick_line)
+  if %r{Nickname: #{nick} << ONLINE >>}.match(nick_line) != nil
+    return true
+  else
+    tsputs "SEND: NOTICE #{nick} :Who are you? Go IDENTIFY with NickServ."
+    socket.puts "NOTICE #{nick} :Who are you? Go IDENTIFY with NickServ."
+    return false
+  end
+end
+      
 
+def irc(irc_socket)
   tsputs "SEND: PASS #{NICKSERV_PASS}"
   irc_socket.puts "PASS #{NICKSERV_PASS}"
   tsputs "SEND: NICK silvrfish"
@@ -18,13 +34,13 @@ def irc(irc_socket)
     tsputs line
     if line.include? "001"
       identify irc_socket, NICKSERV_PASS
-      Commands.join irc_socket, AUTH_USERS[0], "null_channel", INIT_CHANNELS
+      INIT_CHANNELS.each {|chan| irc_socket.puts "JOIN #{chan}"}
       break
     end
   end
 
   #puts output and parses messages
-  while line = irc_socket.gets.rstrip
+  while line = @@socket_mutex.synchronize{irc_socket.gets.rstrip}
     tsputs line
     #if connection fails
     if %r{^ERROR :Closing Link:}.match(line) != nil
@@ -90,13 +106,22 @@ def irc(irc_socket)
         end
         command.downcase! #case insensitivity
         if Commands.respond_to? command
-          Thread.new{ #MAOR THREDZ MAOR BETTUR
-            begin
-              Commands.send(command, irc_socket, nick, chan, command_args)
-            rescue => e
-              puts e.message
+          exec = true #because mutex are hard
+          if ["join", "part", "restart", "start", "stop"].include? command
+            if !@@socket_mutex.synchronize{identified? irc_socket, nick} #have to do this here or else while loop will lock before the thread can
+              exec = false
             end
-          }
+          end
+          if exec
+            Thread.new{ #MAOR THREDZ MAOR BETTUR
+              begin
+                Commands.send(command, irc_socket, nick, chan, command_args)
+              rescue => e
+                puts e.message
+                puts e.backtrace.inspect
+              end
+            }
+          end
         else
           tsputs "SEND: NOTICE #{nick} :#{command} is not a valid command."
           irc_socket.puts "NOTICE #{nick} :#{command} is not a valid command."

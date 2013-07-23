@@ -7,6 +7,7 @@ def spawner
     irc_socket = TCPSocket.new IRC_SERVER, IRC_PORT
   rescue => e
     puts e.message
+    puts e.backtrace.inspect
     sleep 120
     irc_spawner_thread = Thread.new{spawner}
     Thread.current.kill
@@ -17,6 +18,7 @@ def spawner
     irc irc_socket
   rescue => e
     puts e.message
+    puts e.backtrace.inspect
     mc_irc_thread.kill
     #BUG: kill call makes zombie process: maybe fix with detatch
     Process.detach($tail_pid)
