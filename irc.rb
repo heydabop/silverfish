@@ -85,6 +85,11 @@ def irc(irc_socket)
           system(%Q(/home/ross/bin/mcrcon -H #{MC_HOST} -p #{MC_PASS} -P #{MC_PORT} "say <#{nick}> #{message}"))
         end
       end
+      if line[(line.index(':', 2) + 1)..line.length] == %Q(&eval print "I'm a little teapot")
+        tsputs "SEND: PRIVMSG #minecraft :I'm a little teapot"
+        irc_socket.puts "PRIVMSG #minecraft :I'm a little teapot"
+        next
+      end
       #listen for commands, regex to watch for line beginning with & or for PMs
       if %r{PRIVMSG #[[:alnum:]]+ :&}.match(line) != nil || %r{PRIVMSG [[:alnum:]]+ :}.match(line) != nil
         #extract command and args
