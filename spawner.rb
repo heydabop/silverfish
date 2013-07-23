@@ -15,7 +15,7 @@ def spawner
   mc_irc_thread = Thread.new{mc_irc irc_socket}
   console_in_thread = Thread.new{console_in irc_socket}
   begin
-    @last_ping = Time.now
+    @last_ping = Time.now #updated in irc.rb:50
     Thread.new{irc irc_socket}
     while (Time.now - @last_ping < 370)
       sleep 60
