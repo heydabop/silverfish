@@ -25,7 +25,9 @@ def spawner
     system(%Q(kill #{$tail_pid})) #global, initialized in main.rb, set in mc_irc.rb
     console_in_thread.kill
     irc_socket.close
+    puts "SLEEPING 120"
     sleep 120
+    puts "RESTARTING"
     irc_spawner_thread = Thread.new{spawner}
   end
   mc_irc_thread.join

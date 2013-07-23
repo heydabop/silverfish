@@ -93,9 +93,16 @@ def irc(irc_socket)
           command = line[index..line.length].split(' ')[0]
           if command[0] == '&' #delete escape char if used
             command.slice!(0)
+          elsif command[0] == "\u0001" #CTCP
+            command.slice!(0)
+            command.slice!(command.index("\u0001"))
+            command_args = [command] #CTCP command
+            command = "ctcp"
           end
-          command_args = line[index..line.length].split(' ')
-          command_args.delete_at(0)
+          if command != "ctcp"
+            command_args = line[index..line.length].split(' ')
+            command_args.delete_at(0)
+          end
         else #find command escape char
           #extract command and args
           index = line.index('&') + 1
