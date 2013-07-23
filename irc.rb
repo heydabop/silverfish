@@ -47,6 +47,7 @@ def irc(irc_socket)
       irc_socket.puts "QUIT" #If you haveb't actually disconnected, you have now
       raise IOError, "Connection Error."
     end
+    @last_ping = Time.now #used in spawner
     #listen for a respond to pings
     if %r{^PING}.match(line) != nil
       server = line.split(':')[1]

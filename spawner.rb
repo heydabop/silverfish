@@ -15,7 +15,12 @@ def spawner
   mc_irc_thread = Thread.new{mc_irc irc_socket}
   console_in_thread = Thread.new{console_in irc_socket}
   begin
-    irc irc_socket
+    @last_ping = Time.now
+    Thread.new{irc irc_socket}
+    while (Time.now - @last_ping < 370)
+      sleep 60
+    end
+    raise "IRC dead"
   rescue => e
     puts e.message
     puts e.backtrace.inspect
