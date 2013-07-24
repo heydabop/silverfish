@@ -1,6 +1,6 @@
 AUTH_USERS = ["heydabop"]
 
-INIT_CHANNELS = [""]
+INIT_CHANNELS = ["#minecraft"]
 
 #NICKSERV_PASS = ""
 

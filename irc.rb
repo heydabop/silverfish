@@ -90,8 +90,8 @@ def irc(irc_socket)
         irc_socket.puts "PRIVMSG #minecraft :I'm a little teapot"
         next
       end
-      #listen for commands, regex to watch for line beginning with & or for PMs
-      if %r{PRIVMSG #[[:alnum:]]+ :&}.match(line) != nil || %r{PRIVMSG [[:alnum:]]+ :}.match(line) != nil
+      #listen for commands, regex to watch for line beginning with & or mention, or for PMs
+      if %r{^:\w+!~?\w+@[\w\.]+ PRIVMSG #\w+ :&}.match(line) != nil || %r{^:\w+!~?\w+@[\w\.]+ PRIVMSG silvrfish :}.match(line) != nil
         #extract command and args
         if chan == "silvrfish" #is a PM
           chan = nick #respond with PM
