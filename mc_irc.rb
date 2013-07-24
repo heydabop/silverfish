@@ -1,12 +1,12 @@
 def mc_irc irc_socket
   tail_process = IO.popen "tail -n 0 -f #{SERVER_LOG}"
   $tail_pid = tail_process.pid #init in main.rb, used in spawner.rb
-  while log_line = tail_process.readline.rstrip
+  while log_line = tail_process.readline.strip
     if %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] <\w+>}.match(log_line) != nil #chat message
       index = log_line.index('<') + 1
       endIndex = log_line.index('>')
       nick = log_line[index...endIndex]
-      message = log_line[(endIndex+2)..log_line.length].rstrip
+      message = log_line[(endIndex+2)..log_line.length].strip
       tsputs "SEND: PRIVMSG #minecraft :<#{nick}> #{message}"
       begin
         irc_socket.puts "PRIVMSG #minecraft :<#{nick}> #{message}"

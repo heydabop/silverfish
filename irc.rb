@@ -9,7 +9,7 @@ end
 def identified?(socket, nick)
   tsputs "SEND: PRIVMSG NickServ :info #{nick}"
   socket.puts "PRIVMSG NickServ :info #{nick}"
-  nick_line = socket.gets.rstrip
+  nick_line = socket.gets.strip
   tsputs(nick_line)
   if %r{Nickname: #{nick} << ONLINE >>}.match(nick_line) != nil
     return true
@@ -40,7 +40,7 @@ def irc(irc_socket)
   end
 
   #puts output and parses messages
-  while line = @@socket_mutex.synchronize{irc_socket.gets.rstrip}
+  while line = @@socket_mutex.synchronize{irc_socket.gets.strip}
     tsputs line
     #if connection fails
     if %r{^ERROR :Closing Link:}.match(line) != nil
@@ -90,8 +90,10 @@ def irc(irc_socket)
         irc_socket.puts "PRIVMSG #minecraft :I'm a little teapot"
         next
       end
-      #listen for commands, regex to watch for line beginning with & or mention, or for PMs
-      if %r{^:\w+!~?\w+@[\w\.]+ PRIVMSG #\w+ :&}.match(line) != nil || %r{^:\w+!~?\w+@[\w\.]+ PRIVMSG silvrfish :}.match(line) != nil
+      #listen for commands via command prefix char, PM, or mention
+      if %r{^:\w+!~?\w+@[\w\.]+ PRIVMSG #\w+ :&}.match(line) != nil \
+        || %r{^:\w+!~?\w+@[\w\.]+ PRIVMSG silvrfish :}.match(line) != nil \
+        || %r{^:\w+!~?\w+@[\w\.]+ PRIVMSG #\w+ :silvrfish}.match(line) != nil \
         #extract command and args
         if chan == "silvrfish" #is a PM
           chan = nick #respond with PM
@@ -109,13 +111,23 @@ def irc(irc_socket)
             command_args = line[index..line.length].split(' ')
             command_args.delete_at(0)
           end
-        else #find command escape char
+        elsif line[line.index(':', 2) + 1] == '&'
           #extract command and args
           index = line.index('&') + 1
           command = line[index..line.length].split(' ')[0]
           command_args = line[index..line.length].split(' ')
           command_args.delete_at(0)
           #end
+        else #mention
+          index = line.index(":silvrfish") + 10
+          command = line[index..line.length]
+          if %r{[:punct:]}.match(command[0]) != nil #punctuation after mention
+            command.slice!(0)
+          end
+          command.strip!
+          command_args = command.split(' ')
+          command_args.delete_at(0)
+          command = command.split(' ')[0]
         end
         command.downcase! #case insensitivity
         if Commands.respond_to? command
