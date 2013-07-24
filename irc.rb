@@ -85,13 +85,13 @@ def irc(irc_socket)
           system(%Q(/home/ross/bin/mcrcon -H #{MC_HOST} -p #{MC_PASS} -P #{MC_PORT} "say <#{nick}> #{message}"))
         end
       end
-      if line[(line.index(':', 2) + 1)..line.length] == %Q(&eval print "I'm a little teapot")
+      if line[(line.index(':', 2) + 1)..line.length] == %Q(#{COMMAND_PREFIX}eval print "I'm a little teapot")
         tsputs "SEND: PRIVMSG #minecraft :I'm a little teapot"
         irc_socket.puts "PRIVMSG #minecraft :I'm a little teapot"
         next
       end
       #listen for commands via command prefix char, PM, or mention
-      if %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #\w+ :&}.match(line) != nil \
+      if %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #\w+ :#{COMMAND_PREFIX}}.match(line) != nil \
         || %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{NICKNAME} :}.match(line) != nil \
         || %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #\w+ :#{NICKNAME}\W? }.match(line) != nil \
         #extract command and args
@@ -99,7 +99,7 @@ def irc(irc_socket)
           chan = nick #respond with PM
           index = line.index(':', 2) + 1
           command = line[index..line.length].split(' ')[0]
-          if command[0] == '&' #delete escape char if used
+          if command[0] == COMMAND_PREFIX #delete escape char if used
             command.slice!(0)
           elsif command[0] == "\u0001" #CTCP
             command.slice!(0)
@@ -111,9 +111,9 @@ def irc(irc_socket)
             command_args = line[index..line.length].split(' ')
             command_args.delete_at(0)
           end
-        elsif line[line.index(':', 2) + 1] == '&'
+        elsif line[line.index(':', 2) + 1] == COMMAND_PREFIX
           #extract command and args
-          index = line.index('&') + 1
+          index = line.index(COMMAND_PREFIX) + 1
           command = line[index..line.length].split(' ')[0]
           command_args = line[index..line.length].split(' ')
           command_args.delete_at(0)

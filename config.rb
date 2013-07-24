@@ -4,6 +4,7 @@ INIT_CHANNELS = ["#minecraft"]
 
 #NICKSERV_PASS = ""
 
+COMMAND_PREFIX = '&'
 
 NICKNAME = "silvrfish"
 
