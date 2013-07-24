@@ -23,7 +23,9 @@ def Commands.playtime(socket, nick, channel, args) #args[0] should be username
     if !connected && %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] (?i:#{user})\[/[.:0-9]*\] logged in with entity id}.match(line) != nil
       connectTime = Time.parse(line[0...line.index(" [INFO] ")])
       connected = true
-    elsif connected && %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] (?i:#{user}) lost connection}.match(line) != nil
+    elsif connected && (%r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] (?i:#{user}) lost connection}.match(line) != nil\
+                        || %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] Stopping server}.match(line) != nil\
+                        || %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] Starting minecraft server}.match(line) != nil)
       disconnectTime = Time.parse(line[0...line.index(" [INFO] ")])
       connected = false
       seconds += (disconnectTime - connectTime)
