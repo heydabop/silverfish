@@ -24,10 +24,10 @@ end
 def irc(irc_socket)
   tsputs "SEND: PASS #{NICKSERV_PASS}"
   irc_socket.puts "PASS #{NICKSERV_PASS}"
-  tsputs "SEND: NICK silvrfish"
-  irc_socket.puts "NICK silvrfish"
-  tsputs "SEND: USER silvrfish silverfish.0xkohen.com * :silvrfish"
-  irc_socket.puts "USER silvrfish silverfish.0xkohen.com * :silvrfish"
+  tsputs "SEND: NICK #{NICKNAME}"
+  irc_socket.puts "NICK #{NICKNAME}"
+  tsputs "SEND: USER #{USERNAME} #{HOSTNAME} #{SERVERNAME} :#{REALNAE}"
+  irc_socket.puts "USER #{USERNAME} #{HOSTNAME} #{SERVERNAME} :#{REALNAE}"
 
   #wait for auth to finish, join channels and identify upon server sending 001
   while line = irc_socket.gets
@@ -92,10 +92,10 @@ def irc(irc_socket)
       end
       #listen for commands via command prefix char, PM, or mention
       if %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #\w+ :&}.match(line) != nil \
-        || %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG silvrfish :}.match(line) != nil \
-        || %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #\w+ :silvrfish\W? }.match(line) != nil \
+        || %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{NICKNAME} :}.match(line) != nil \
+        || %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #\w+ :#{NICKNAME}\W? }.match(line) != nil \
         #extract command and args
-        if chan == "silvrfish" #is a PM
+        if chan == NICKNAME #is a PM
           chan = nick #respond with PM
           index = line.index(':', 2) + 1
           command = line[index..line.length].split(' ')[0]
@@ -119,7 +119,7 @@ def irc(irc_socket)
           command_args.delete_at(0)
           #end
         else #mention
-          index = line.index(":silvrfish") + 10
+          index = line.index(":#{NICKNAME}") + 10
           command = line[index..line.length]
           if %r{\W}.match(command[0]) != nil #punctuation after mention
             command.slice!(0)
