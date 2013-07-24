@@ -26,8 +26,8 @@ def irc(irc_socket)
   irc_socket.puts "PASS #{NICKSERV_PASS}"
   tsputs "SEND: NICK #{NICKNAME}"
   irc_socket.puts "NICK #{NICKNAME}"
-  tsputs "SEND: USER #{USERNAME} #{HOSTNAME} #{SERVERNAME} :#{REALNAE}"
-  irc_socket.puts "USER #{USERNAME} #{HOSTNAME} #{SERVERNAME} :#{REALNAE}"
+  tsputs "SEND: USER #{USERNAME} #{HOSTNAME} #{SERVERNAME} :#{REALNAME}"
+  irc_socket.puts "USER #{USERNAME} #{HOSTNAME} #{SERVERNAME} :#{REALNAME}"
 
   #wait for auth to finish, join channels and identify upon server sending 001
   while line = irc_socket.gets
