@@ -91,9 +91,9 @@ def irc(irc_socket)
         next
       end
       #listen for commands via command prefix char, PM, or mention
-      if %r{^:\w+!~?\w+@[\w\.]+ PRIVMSG #\w+ :&}.match(line) != nil \
-        || %r{^:\w+!~?\w+@[\w\.]+ PRIVMSG silvrfish :}.match(line) != nil \
-        || %r{^:\w+!~?\w+@[\w\.]+ PRIVMSG #\w+ :silvrfish}.match(line) != nil \
+      if %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #\w+ :&}.match(line) != nil \
+        || %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG silvrfish :}.match(line) != nil \
+        || %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #\w+ :silvrfish\W? }.match(line) != nil \
         #extract command and args
         if chan == "silvrfish" #is a PM
           chan = nick #respond with PM
@@ -121,7 +121,7 @@ def irc(irc_socket)
         else #mention
           index = line.index(":silvrfish") + 10
           command = line[index..line.length]
-          if %r{[:punct:]}.match(command[0]) != nil #punctuation after mention
+          if %r{\W}.match(command[0]) != nil #punctuation after mention
             command.slice!(0)
           end
           command.strip!
