@@ -1,12 +1,16 @@
-AUTH_USERS = ["heydabop"]
+AUTH_USERS = ["heydabop"] #used to verify authority to run things like join, part, stop, start, etc.
 
-INIT_CHANNELS = ["#minecraft"]
+INIT_CHANNELS = ["#minecraft"] #channels to join upon start
 
-#NICKSERV_PASS = ""
+#NICKSERV_PASS = "" #password to pass to NickServ, defined in pass.rb
 
-COMMAND_PREFIX = '&'
+#MC_PASS = "uka8Ohk6el" #rcon pass, used when calling mcrcon, defined in mcrcon.rb
+#MC_HOST = "127.0.0.1" #rcon host
+#MC_PORT = "20155" #rcon port
 
-NICKNAME = "silvrfish"
+COMMAND_PREFIX = '&' #prefix for commands used in channel
+
+NICKNAME = "silvrfish" #IRC nick
 
 #per RFC 1459 4.1.3
 USERNAME = "silvrfish"
@@ -15,6 +19,6 @@ SERVERNAME = "*"
 REALNAME = "silvrfish"
 
 IRC_SERVER = "0xkohen.com"
-IRC_PORT = 20158
+IRC_PORT = 20158 #commonly 6667
 
-SERVER_LOG = "/home/ross/ftb/server.log"
+SERVER_LOG = "/home/ross/ftb/server.log" #path to minecraft server log
