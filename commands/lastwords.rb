@@ -35,11 +35,13 @@ def Commands.lastwords(socket, nick, channel, args)
     if %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] \w+}.match(line) != nil #not a chat message
       death_types.each {|death|
         if line.downcase.include? death #death message
+          puts line
           index = line.downcase.index(user)
           death_message = line[index..line.length].strip
           chat_lines = lines[x..lines.length]
           chat_lines.each {|chat|
             if %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] <(?i:#{user})>}.match(chat) != nil
+              puts chat
               index = chat.index('<')
               last_word = chat[index..chat.length].strip
 
@@ -79,6 +81,7 @@ def Commands.lastwords(socket, nick, channel, args)
               end
               
               deaths.push(deathInfo.new(last_word, time, death_message))
+              break
             end
           }
         end
