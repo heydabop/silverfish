@@ -1,4 +1,4 @@
 def Commands.botsnack(socket, nick, channel, args)
-  tsputs "SEND: PRIVMSG #{channel} :Fuck off. I don't even do anything yet. I don't need your sympathy."
-  socket.puts "PRIVMSG #{channel} :Fuck off. I don't even do anything yet. I don't need your sympathy."
+  tsputs "SEND: PRIVMSG #{channel} :Stop that. I'm not even hungry."
+  socket.puts "PRIVMSG #{channel} :Stop that. I'm not even hungry."
 end

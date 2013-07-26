@@ -15,7 +15,7 @@ NICKNAME = "silvrfish" #IRC nick
 
 #per RFC 1459 4.1.3
 USERNAME = "silvrfish"
-HOSTNAME = "silverfish.0xkoehn.com"
+HOSTNAME = "home.0xsilverfish.com"
 SERVERNAME = "*"
 REALNAME = "silvrfish"
 
