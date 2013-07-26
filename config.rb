@@ -9,9 +9,6 @@ INIT_CHANNELS = ["#minecraft"] #channels to join upon start
 #MC_HOST = "127.0.0.1" #rcon host
 #MC_PORT = "20155" #rcon port
 
-#BUG: If command_prefix is a special character in regexps, you're gonna have a bad time
-#TEMPFIX: In the line below the comment "#listen for commands via command prefix char, PM, or mention"
-#replace #{COMMAND_PREFIX} with \[prefix]. Example, if COMMAND_PREFIX = +, then #{COMMAND_PREFIX should be \+
 COMMAND_PREFIX = '&' #prefix for commands used in channel
 
 NICKNAME = "silvrfish" #IRC nick

@@ -6,6 +6,13 @@ require './config.rb'
 require './spawner.rb'
 require './pass.rb'
 
+#needed to work with later regex
+if ". | ( ) [ ] { } \\ ^ $ + * ?".include?(COMMAND_PREFIX)
+  RCOMMAND_PREFIX = "\\#{COMMAND_PREFIX}"
+elsif
+  RCOMMAND_PREFIX = COMMAND_PREFIX
+end
+  
 $tail_pid = 0 #i know, i know...
 
 #puts with appended timestamp

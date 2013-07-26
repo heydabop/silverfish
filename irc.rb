@@ -93,7 +93,7 @@ def irc(irc_socket)
         next
       end
       #listen for commands via command prefix char, PM, or mention
-      if %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #\w+ :#{COMMAND_PREFIX}}.match(line) != nil \
+      if %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #\w+ :#{RCOMMAND_PREFIX}}.match(line) != nil \
         || %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{NICKNAME} :}.match(line) != nil \
         || %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #\w+ :#{NICKNAME}\W? }.match(line) != nil \
         #extract command and args
