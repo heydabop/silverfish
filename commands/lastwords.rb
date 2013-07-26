@@ -1,27 +1,7 @@
 def Commands.lastwords(socket, nick, channel, args)
   require 'set'
-  require 'time'
 
-=begin
-  class DeathInfo
-    def initialize(death, word, ti)
-      @death_message = death
-      @last_word = word
-      @time = ti
-    end
-    def death_message
-      return @death_message
-    end
-    def last_word
-      return @last_word
-    end
-    def time
-      return @time
-    end
-  end
-=end
-
-  deathInfo = Struct.new(:last_word, :time, :death_message)
+  deathInfo = Struct.new(:last_word, :death_message)
   deaths = Array.new
 
   user = args[0].downcase
@@ -43,42 +23,7 @@ def Commands.lastwords(socket, nick, channel, args)
               index = chat.index('<')
               last_word = chat[index..chat.length].strip
 
-              chat_time = Time.parse(chat[0...chat.index(" [INFO] ")])
-              death_time = Time.parse(line[0...chat.index(" [INFO] ")])
-              seconds = death_time - chat_time
-              minutes = 0
-              hours = 0
-              if seconds > 60
-                minutes = seconds / 60
-              end
-              if minutes > 60
-                hours = minutes / 60
-              end
-              seconds = seconds.round
-              minutes = minutes.round
-              hours = hours.round
-              time = ""
-              if minutes == 0 && hours == 0
-                if seconds == 1
-                  time = "1 second"
-                else
-                  time = "#{seconds} seconds"
-                end
-              elsif hours == 0
-                if minutes == 1
-                  time = "1 minute"
-                else
-                  time = "#{minutes} minutes"
-                end
-              else
-                if hours == 1
-                  time = "1 hour"
-                else
-                  time = "#{hours} hours"
-                end
-              end
-              
-              deaths.push(deathInfo.new(last_word, time, death_message))
+              deaths.push(deathInfo.new(last_word, death_message))
               break
             end
           }
@@ -88,8 +33,8 @@ def Commands.lastwords(socket, nick, channel, args)
   }
 
   death = deaths.sample
-  tsputs "SEND: PRIVMSG #{channel} :#{death.last_word} | About #{death.time} later, #{death.death_message}"
-  socket.puts "PRIVMSG #{channel} :#{death.last_word} | About #{death.time} later, #{death.death_message}"
+  tsputs "SEND: PRIVMSG #{channel} :#{death.last_word} | #{death.death_message}"
+  socket.puts "PRIVMSG #{channel} :#{death.last_word} | #{death.death_message}"
 end
               
 
