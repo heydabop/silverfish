@@ -22,8 +22,10 @@ end
       
 
 def irc(irc_socket)
-  tsputs "SEND: PASS #{NICKSERV_PASS}"
-  irc_socket.puts "PASS #{NICKSERV_PASS}"
+  if defined?(SERVER_PASS)
+    tsputs "SEND: PASS #{SERVER_PASS}"
+    irc_socket.puts "PASS #{SERVER_PASS}"
+  end
   tsputs "SEND: NICK #{NICKNAME}"
   irc_socket.puts "NICK #{NICKNAME}"
   tsputs "SEND: USER #{USERNAME} #{HOSTNAME} #{SERVERNAME} :#{REALNAME}"

@@ -3,6 +3,7 @@ AUTH_USERS = ["heydabop"] #used to verify authority to run things like join, par
 INIT_CHANNELS = ["#minecraft"] #channels to join upon start
 
 #NICKSERV_PASS = "" #password to pass to NickServ, defined in pass.rb
+#SERVER_PASS = "" #password for server
 
 #MC_PASS = "uka8Ohk6el" #rcon pass, used when calling mcrcon, defined in mcrcon.rb
 #MC_HOST = "127.0.0.1" #rcon host
