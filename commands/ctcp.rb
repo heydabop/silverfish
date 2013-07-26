@@ -14,11 +14,14 @@ def Commands.ctcp(socket, nick, channel, args) #args[0] is CTCP command
     tsputs "SEND: NOTICE #{nick} :\u0001USERINFO #{USERNAME}\u0001"
     socket.puts "NOTICE #{nick} :\u0001USERINFO #{USERNAME}\u0001"
   when "TIME"
-    tsputs "SEND: NOTICE #{nick} :\u0001TIME #{`date`}"
-    socket.puts "NOTICE #{nick} :\u0001TIME #{`date`}"
+    tsputs "SEND: NOTICE #{nick} :\u0001TIME #{`date`}\u0001"
+    socket.puts "NOTICE #{nick} :\u0001TIME #{`date`}\u0001"
   when "FINGER"
-    tsputs "SEND: NOTICE #{nick} :\u0001FINGER #{REALNAME} (#{NICKNAME})  Idle NEVER"
-    socket.puts "NOTICE #{nick} :\u0001FINGER #{REALNAME} (#{NICKNAME})  Idle NEVER"
+    tsputs "SEND: NOTICE #{nick} :\u0001FINGER #{REALNAME} (#{NICKNAME})  Idle NEVER\u0001"
+    socket.puts "NOTICE #{nick} :\u0001FINGER #{REALNAME} (#{NICKNAME})  Idle NEVER\u0001"
+  when "BOTINFO"
+    tsputs "SEND: NOTICE #{nick} :\u0001BOTINFO Definitely a fleshy human over here. No metal. Can I have a hamburger?\u0001"
+    socket.puts "NOTICE #{nick} :\u0001BOTINFO Definitely a fleshy human over here. No metal. Can I have a hamburger?\u0001"
   end
 end
     

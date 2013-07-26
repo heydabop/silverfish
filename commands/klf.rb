@@ -22,8 +22,8 @@ def Commands.klf(socket, nick, channel, args)
       players = line.strip
     end
   }
-  tsputs "SEND: PRIVMSG #{channel} :Kerbel LiveFeed: #{host}:#{port} - v#{version} - #{numPlayers} - #{players}"
-  socket.puts "PRIVMSG #{channel} :Kerbel LiveFeed: #{host}:#{port} - v#{version} - #{numPlayers} - #{players}"
+  tsputs "SEND: PRIVMSG #{channel} :Kerbal LiveFeed: #{host}:#{port} - v#{version} - #{numPlayers} - #{players}"
+  socket.puts "PRIVMSG #{channel} :Kerbal LiveFeed: #{host}:#{port} - v#{version} - #{numPlayers} - #{players}"
 end
   
 
