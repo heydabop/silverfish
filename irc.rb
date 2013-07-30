@@ -87,11 +87,6 @@ def irc(irc_socket)
           system(%Q(/home/ross/bin/mcrcon -H #{MC_HOST} -p #{MC_PASS} -P #{MC_PORT} "say <#{nick}> #{message}"))
         end
       end
-      if line[(line.index(':', 2) + 1)..line.length] == %Q(#{COMMAND_PREFIX}eval print "I'm a little teapot")
-        tsputs "SEND: PRIVMSG #minecraft :I'm a little teapot"
-        irc_socket.puts "PRIVMSG #minecraft :I'm a little teapot"
-        next
-      end
       #listen for commands via command prefix char, PM, or mention
       if %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #\w+ :#{RCOMMAND_PREFIX}}.match(line) != nil \
         || %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{NICKNAME} :}.match(line) != nil \
