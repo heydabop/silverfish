@@ -99,13 +99,12 @@ def irc(irc_socket)
           if command[0] == COMMAND_PREFIX #delete escape char if used
             command.slice!(0)
           elsif command[0] == "\u0001" #CTCP
-            command.slice!(0)
-            command.slice!(command.index("\u0001"))
+            command.delete!("\u0001")
             command_args = [command] #CTCP command
             command = "ctcp"
           end
+          command_args = line[index..line.length].split(' ')
           if command != "ctcp"
-            command_args = line[index..line.length].split(' ')
             command_args.delete_at(0)
           end
         elsif line[line.index(':', 2) + 1] == COMMAND_PREFIX

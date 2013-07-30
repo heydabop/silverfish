@@ -1,4 +1,7 @@
 def Commands.ctcp(socket, nick, channel, args) #args[0] is CTCP command
+  args[0].delete!("\u0001")
+  args[args.length-1].delete!("\u0001")
+
   command = args[0]
   case command
   when "CLIENTINFO"
@@ -22,6 +25,13 @@ def Commands.ctcp(socket, nick, channel, args) #args[0] is CTCP command
   when "BOTINFO"
     tsputs "SEND: NOTICE #{nick} :\u0001BOTINFO Definitely a fleshy human over here. No metal. Can I have a hamburger?\u0001"
     socket.puts "NOTICE #{nick} :\u0001BOTINFO Definitely a fleshy human over here. No metal. Can I have a hamburger?\u0001"
+  when "PING"
+    message = ""
+    args.each {|arg|
+      message = "#{message}#{arg} "
+    }
+    tsputs "SEND: NOTICE #{nick} :\u0001#{message.strip}\u0001"
+    socket.puts "NOTICE #{nick} :\u0001#{message.strip}\u0001"
   end
 end
     
