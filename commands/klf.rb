@@ -1,11 +1,6 @@
 def Commands.klf(socket, nick, channel, args)
-  site = TCPSocket.new "127.0.0.1", 8016
-  site.print "GET / HTTP/1.0\n\n"
-  lines = Array.new
-  while line = site.gets
-    lines.push line
-  end
-  site.close
+  html = Net::HTTP.get('127.0.0.1', '/', 8016)
+  lines = html.split "\n"
   host = "mc.0xsilverfish.com"
   version = ""
   port = ""

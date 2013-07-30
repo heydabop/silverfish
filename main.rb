@@ -1,6 +1,9 @@
 #!/usr/bin/ruby
 
 require 'socket'
+require 'net/http'
+require 'time'
+require 'set'
 require './mcrcon.rb'
 require './config.rb'
 require './spawner.rb'

@@ -1,5 +1,4 @@
 def Commands.playtime(socket, nick, channel, args) #args[0] should be username
-  require 'time' #expands core-time
   user = args[0]
   if user.length > 16
     raise("ERROR: Invalid username, length exceeds 16 characters.")

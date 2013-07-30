@@ -1,6 +1,4 @@
 def Commands.lastwords(socket, nick, channel, args)
-  require 'set'
-
   deathInfo = Struct.new(:last_word, :death_message)
   deaths = Array.new
 

@@ -1,8 +1,6 @@
 def Commands.excuse(socket, nick, channel, args)
-  require 'net/http'
-
   html = Net::HTTP.get('programmingexcuses.com', '/')
-  lines = html.split '\n'
+  lines = html.split "\n"
   message = ""
   lines.each {|line|
     if line.include? %Q(href="/")
