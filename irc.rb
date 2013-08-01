@@ -41,6 +41,8 @@ def irc(irc_socket)
     end
   end
 
+  @rgen = Random.new(Time.now.nsec)
+
   #puts output and parses messages
   while line = @@socket_mutex.synchronize{irc_socket.gets.strip}
     tsputs line
@@ -115,6 +117,16 @@ def irc(irc_socket)
           command_args.delete_at(0)
           #end
         else #mention
+          if %r{\?$}.match(line) != nil
+            if @rgen.rand(2) == 1
+              tsputs "SEND: PRIVMSG #{chan} :Yes."
+              irc_socket.puts "PRIVMSG #{chan} :Yes."
+            else
+              tsputs "SEND: PRIVMSG #{chan} :No."
+              irc_socket.puts "PRIVMSG #{chan} :No."
+            end
+            next
+          end
           index = line.index(":#{NICKNAME}") + 10
           command = line[index..line.length]
           if %r{\W}.match(command[0]) != nil #punctuation after mention
