@@ -20,7 +20,7 @@ def spawner
     while (Time.now - @last_ping < 370)
       sleep 60
     end
-    raise "IRC dead"
+    raise "IRC DEAD"
   rescue => e
     puts e.message
     puts e.backtrace.inspect
