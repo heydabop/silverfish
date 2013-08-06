@@ -25,7 +25,7 @@ end
 
 module Commands
   #require all from commands directory
-  Dir["./commands/*.rb"].each {|file| require file}
+  Dir["./commands/*.rb"].each {|file| load file}
 end
 
 def identify (socket, passwd)
