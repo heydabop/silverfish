@@ -140,7 +140,7 @@ def irc(irc_socket)
         command.downcase! #case insensitivity
         if Commands.respond_to? command
           exec = true #because mutex are hard
-          if ["join", "part", "restart", "start", "stop"].include? command
+          if AUTH_COMMANDS.include? command
             if !@@socket_mutex.synchronize{identified? irc_socket, nick} #have to do this here or else while loop will lock before the thread can
               exec = false
             end
