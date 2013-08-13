@@ -34,7 +34,6 @@ def mc_irc irc_socket
         puts e.backtrace.inspect
       end
     else
-      puts death_types.size
       death_types.each {|death|
         if (message = %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] (#{death}.*)}.match(log_line)) != nil
          message = message[1].strip
