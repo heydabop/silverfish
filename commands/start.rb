@@ -16,7 +16,7 @@ def Commands.start(socket, nick, channel, args)
     serverout = IO.open(temp_log_file, "w")
 
     #server_pid = Process.spawn("source /home/ross/.bashrc && ./ServerStart.sh", :chdir=>"/home/ross/ftb")
-    server_pid = Process.spawn(%Q(/bin/bash -c "source /home/ross/.bashrc && ./ServerStart.sh"), :chdir=>"/home/ross/ftb", [:out, :err]=>serverout, :in=>"/dev/null")
+    server_pid = Process.spawn(%Q(/bin/bash -c "source /home/ross/.bashrc && ./ServerStart.sh"), :chdir=>"/home/ross/ftb", [:out, :err]=>"/dev/null", :in=>"/dev/null")
     Process.detach(server_pid)
   end
 end
