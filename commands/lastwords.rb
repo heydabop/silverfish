@@ -3,7 +3,7 @@ def Commands.lastwords(socket, nick, channel, args)
   deaths = Array.new
 
   user = args[0].downcase
-  death_types = Set.new ["#{user} was", "#{user} walked into a cactus whilst trying to escape", "#{user} drowned", "#{user} blew up", "#{user} hit the ground too hard", "#{user} fell", "#{user} went up in flames", "#{user} burned to death","#{user} walked into a fire whilst fighting", "#{user} got finished off by", "#{user} tried to swim in lava", "#{user} died", "#{user} starved to death", "#{user} suffocated in a wall", "#{user} withered away"]
+  death_types = Set.new ["#{user} was", "#{user} walked into a cactus whilst trying to escape", "#{user} drowned", "#{user} blew up", "#{user} hit the ground too hard", "#{user} fell", "#{user} went up in flames", "#{user} burned to death","#{user} walked into a fire whilst fighting", "#{user} got finished off by", "#{user} tried to swim in lava", "#{user} died", "#{user} starved to death", "#{user} suffocated in a wall", "#{user} withered away", "#{user} transformed"]
   lines = Array.new
   log = File.new(SERVER_LOG)
   log.each_line {|line| lines.push(line)}

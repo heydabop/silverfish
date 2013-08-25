@@ -1,5 +1,5 @@
 def mc_irc irc_socket
-  death_types = Set.new ['\w{,16} was', '\w{,16} walked into a cactus whilst trying to escape', '\w{,16} drowned', '\w{,16} blew up', '\w{,16} hit the ground too hard', '\w{,16} fell', '\w{,16} went up in flames', '\w{,16} burned to death','\w{,16} walked into a fire whilst fighting', '\w{,16} got finished off by', '\w{,16} tried to swim in lava', '\w{,16} died', '\w{,16} starved to death', '\w{,16} suffocated in a wall', '\w{,16} withered away']  
+  death_types = Set.new ['\w{,16} was', '\w{,16} walked into a cactus whilst trying to escape', '\w{,16} drowned', '\w{,16} blew up', '\w{,16} hit the ground too hard', '\w{,16} fell', '\w{,16} went up in flames', '\w{,16} burned to death','\w{,16} walked into a fire whilst fighting', '\w{,16} got finished off by', '\w{,16} tried to swim in lava', '\w{,16} died', '\w{,16} starved to death', '\w{,16} suffocated in a wall', '\w{,16} withered away', '\w{,16} transformed']  
 
   tail_process = IO.popen "tail -n 0 -f #{SERVER_LOG}"
   $tail_pid = tail_process.pid #init in main.rb, used in spawner.rb

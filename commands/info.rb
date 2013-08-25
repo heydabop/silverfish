@@ -1,6 +1,6 @@
 def Commands.info(socket, nick, channel, args)
-  host = "mc.0xKohen.com"
-  version = "FTB 1.0.1"
+  host = "mc.0xKohen.com:25566"
+  version = "FTB Unleashed v1.1.3"
   list_out = %x[/home/ross/bin/mcrcon -H #{MC_HOST} -p #{MC_PASS} -P #{MC_PORT} list]
   midIndex = list_out.index("/")
   index = list_out.rindex(" ", midIndex)
@@ -10,7 +10,7 @@ def Commands.info(socket, nick, channel, args)
   playerList = list_out[list_out.index(":")+1..list_out.length].strip
   
   motd = ""
-  properties = File.new("/home/ross/ftb/server.properties")
+  properties = File.new("/home/ross/unleashed/server.properties")
   properties.each_line{|line|
     if line.include?("motd=")
       motd = line[line.index("=")+1..line.length].strip
