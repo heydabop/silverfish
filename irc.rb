@@ -99,28 +99,25 @@ def irc(irc_socket)
       if (linereg = %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{chan} :#{RCOMMAND_PREFIX}(.*)}.match(line)) != nil \
         || (linereg = %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{NICKNAME} :\s*(.*)}.match(line)) != nil \
         || (linereg = %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{chan} :#{NICKNAME}\W?\s*(.*)}.match(line)) != nil
-        puts "match"
         #extract command and args
         if chan == NICKNAME #is a PM
-          puts "PM"
           chan = nick #respond with PM
           index = line.index(':', 2) + 1
-          command = linereg[1]
-          puts command
+          command = linereg[1].split(' ')[0]
           if command[0] == "\u0001" #CTCP
             command.delete!("\u0001")
             command_args = [command] #CTCP command
             command = "ctcp"
           end
-          command_args = line[index..line.length].split(' ')
+          command_args = linereg[1].split(' ')
           if command != "ctcp"
             command_args.delete_at(0)
           end
         elsif line[line.index(':', 2) + 1] == COMMAND_PREFIX
           #extract command and args
           index = line.index(COMMAND_PREFIX) + 1
-          command = linereg[1]
-          command_args = line[index..line.length].split(' ')
+          command = linereg[1].split(' ')[0]
+          command_args = linereg[1].split(' ')
           command_args.delete_at(0)
           #end
         else #mention
@@ -134,11 +131,8 @@ def irc(irc_socket)
             end
             next
           end
-          command = linereg[1]
-          command.strip!
-          command_args = command.split(' ')
-          command_args.delete_at(0)
-          command = command.split(' ')[0]
+          command = linereg[1].split(' ')[0]
+          command_args = linereg[1].split(' ')
         end
         command.downcase! #case insensitivity
         if Commands.respond_to? command
