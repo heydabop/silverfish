@@ -9,17 +9,17 @@ INIT_CHANNELS = ["#minecraft"] #channels to join upon start
 #MC_HOST = "127.0.0.1" #rcon host
 #MC_PORT = "20155" #rcon port
 
-COMMAND_PREFIX = '+'
+COMMAND_PREFIX = '&' #prefix for commands used in channel
 
-NICKNAME = "goldnfish"
+NICKNAME = "silvrfish" #IRC nick
 
 #per RFC 1459 4.1.3
-USERNAME = "goldnfish"
+USERNAME = "silvrfish"
 HOSTNAME = "home.0xsilverfish.com"
 SERVERNAME = "*"
 REALNAME = "silvrfish"
 
 IRC_SERVER = "0xkohen.com"
-IRC_PORT = 20159 #commonly 6667
+IRC_PORT = 20158 #commonly 6667
 
-SERVER_LOG = "/home/ross/unleashed/server.log"
+SERVER_LOG = "/home/ross/ftb/server.log" #path to minecraft server log
