@@ -97,13 +97,16 @@ def irc(irc_socket)
       # end
       #listen for commands via command prefix char, PM, or mention
       if (linereg = %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{chan} :#{RCOMMAND_PREFIX}(.*)}.match(line)) != nil \
-        || (linereg = %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{NICKNAME}\s*(.*):}.match(line)) != nil \
+        || (linereg = %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{NICKNAME} :\s*(.*)}.match(line)) != nil \
         || (linereg = %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{chan} :#{NICKNAME}\W?\s*(.*)}.match(line)) != nil
+        puts "match"
         #extract command and args
         if chan == NICKNAME #is a PM
+          puts "PM"
           chan = nick #respond with PM
           index = line.index(':', 2) + 1
           command = linereg[1]
+          puts command
           if command[0] == "\u0001" #CTCP
             command.delete!("\u0001")
             command_args = [command] #CTCP command
