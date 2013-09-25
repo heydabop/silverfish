@@ -1,4 +1,5 @@
 @@socket_mutex = Mutex.new
+@@server = ""
 
 #pong server
 def pong (socket, server)
@@ -19,7 +20,7 @@ def identified?(socket, nick)
     return false
   end
 end
-      
+
 
 def irc(irc_socket)
   if defined?(SERVER_PASS)
@@ -35,6 +36,9 @@ def irc(irc_socket)
   while line = irc_socket.gets
     tsputs line
     if line.include? "001"
+      server_id = %r{:(.*) 001}.match(line)
+      puts server_id
+      @@server = server_id[1]
       identify irc_socket, NICKSERV_PASS
       INIT_CHANNELS.each {|chan| irc_socket.puts "JOIN #{chan}"}
       break
@@ -58,7 +62,9 @@ def irc(irc_socket)
       pong irc_socket, server
       next
     end
-    if line.include?("PRIVMSG") #chat message
+    if %r{^:#{@@server}}.match(line) != nil #server message
+      next
+    elsif %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG}.match(line) != nil #chat message
       #extract nick
       index = line.index(':') + 1
       end_index = line.index('!') - 1
@@ -70,37 +76,35 @@ def irc(irc_socket)
       end_index = chan.index(' ') - 1
       chan = chan[0..end_index]
       #end
-      if chan == "#minecraft" #pipe to minecraft server
-        index = line.index(':', 2) + 1
-        message = line[index..line.length]
-        message.tr!(%q("), %q('))
-        if message.length > 100
-          messages = Array.new
-          while message.length > 100
-            endIndex = message[0..99].rindex(' ')
-            if endIndex == nil
-              endIndex = 99
-            end
-            messages.push(message.slice!(0..endIndex))
-          end
-          messages.each {|msg| system(%Q(/home/ross/bin/mcrcon -H #{MC_HOST} -p #{MC_PASS} -P #{MC_PORT} "say <#{nick}> #{msg}"))}
-          system(%Q(/home/ross/bin/mcrcon -H #{MC_HOST} -p #{MC_PASS} -P #{MC_PORT} "say <#{nick}> #{message}"))
-        else
-          system(%Q(/home/ross/bin/mcrcon -H #{MC_HOST} -p #{MC_PASS} -P #{MC_PORT} "say <#{nick}> #{message}"))
-        end
-      end
+      # if chan == "#minecraft" #pipe to minecraft server
+      #   index = line.index(':', 2) + 1
+      #   message = line[index..line.length]
+      #   message.tr!(%q("), %q('))
+      #   if message.length > 100
+      #     messages = Array.new
+      #     while message.length > 100
+      #       endIndex = message[0..99].rindex(' ')
+      #       if endIndex == nil
+      #         endIndex = 99
+      #       end
+      #       messages.push(message.slice!(0..endIndex))
+      #     end
+      #     messages.each {|msg| system(%Q(/home/ross/bin/mcrcon -H #{MC_HOST} -p #{MC_PASS} -P #{MC_PORT} "say <#{nick}> #{msg}"))}
+      #     system(%Q(/home/ross/bin/mcrcon -H #{MC_HOST} -p #{MC_PASS} -P #{MC_PORT} "say <#{nick}> #{message}"))
+      #   else
+      #     system(%Q(/home/ross/bin/mcrcon -H #{MC_HOST} -p #{MC_PASS} -P #{MC_PORT} "say <#{nick}> #{message}"))
+      #   end
+      # end
       #listen for commands via command prefix char, PM, or mention
-      if %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #\w+ :#{RCOMMAND_PREFIX}}.match(line) != nil \
-        || %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{NICKNAME} :}.match(line) != nil \
-        || %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #\w+ :#{NICKNAME}\W? }.match(line) != nil \
+      if (linereg = %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{chan} :#{RCOMMAND_PREFIX}(.*)}.match(line)) != nil \
+        || (linereg = %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{NICKNAME}\s*(.*):}.match(line)) != nil \
+        || (linereg = %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{chan} :#{NICKNAME}\W?\s*(.*)}.match(line)) != nil
         #extract command and args
         if chan == NICKNAME #is a PM
           chan = nick #respond with PM
           index = line.index(':', 2) + 1
-          command = line[index..line.length].split(' ')[0]
-          if command[0] == COMMAND_PREFIX #delete escape char if used
-            command.slice!(0)
-          elsif command[0] == "\u0001" #CTCP
+          command = linereg[1]
+          if command[0] == "\u0001" #CTCP
             command.delete!("\u0001")
             command_args = [command] #CTCP command
             command = "ctcp"
@@ -112,7 +116,7 @@ def irc(irc_socket)
         elsif line[line.index(':', 2) + 1] == COMMAND_PREFIX
           #extract command and args
           index = line.index(COMMAND_PREFIX) + 1
-          command = line[index..line.length].split(' ')[0]
+          command = linereg[1]
           command_args = line[index..line.length].split(' ')
           command_args.delete_at(0)
           #end
@@ -127,11 +131,7 @@ def irc(irc_socket)
             end
             next
           end
-          index = line.index(":#{NICKNAME}") + 10
-          command = line[index..line.length]
-          if %r{\W}.match(command[0]) != nil #punctuation after mention
-            command.slice!(0)
-          end
+          command = linereg[1]
           command.strip!
           command_args = command.split(' ')
           command_args.delete_at(0)
