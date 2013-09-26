@@ -9,7 +9,7 @@ require './config.rb'
 require './spawner.rb'
 require './pass.rb'
 
-AUTH_COMMANDS = ["join", "part", "restart", "start", "stop", "quit", "kick"]
+AUTH_COMMANDS = ["join", "part", "restart", "start", "stop", "quit", "kick", "verbatim"]
 
 #needed to work with later regex
 if ". | ( ) [ ] { } \\ ^ $ + * ?".include?(COMMAND_PREFIX)
