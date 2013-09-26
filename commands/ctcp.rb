@@ -5,8 +5,8 @@ def Commands.ctcp(socket, nick, channel, args) #args[0] is CTCP command
   command = args[0]
   case command
   when "CLIENTINFO"
-    tsputs "SEND: NOTICE #{nick} :\u0001CLIENTINFO VERSION SOURCE USERINFO CLIENTINFO TIME FINGER\u0001"
-    socket.puts "NOTICE #{nick} :\u0001CLIENTINFO VERSION SOURCE USERINFO CLIENTINFO TIME FINGER\u0001"
+    tsputs "SEND: NOTICE #{nick} :\u0001CLIENTINFO VERSION SOURCE USERINFO CLIENTINFO BOTINFO TIME FINGER\u0001"
+    socket.puts "NOTICE #{nick} :\u0001CLIENTINFO VERSION SOURCE USERINFO CLIENTINFO BOTINFO TIME FINGER\u0001"
   when "VERSION"
     tsputs "SEND: NOTICE #{nick} :\u0001VERSION Heydabot Co. Silverfish Edition vALPHA -- #{`ruby --version`}\u0001"
     socket.puts "NOTICE #{nick} :\u0001VERSION Heydabot Co. Silverfish Edition vALPHA -- #{`ruby --version`}\u0001"
