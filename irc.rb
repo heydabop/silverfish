@@ -1,10 +1,10 @@
-@@socket_mutex = Mutex.new
-@@server = ""
+$socket_mutex = Mutex.new
+$server = ""
 
 #pong server
-def pong (socket, server)
-  tsputs "SEND: PONG #{server}"
-  socket.puts "PONG #{server}"
+def pong (socket, pongserver)
+  tsputs "SEND: PONG #{pongserver}"
+  socket.puts "PONG #{pongserver}"
 end
 
 def identified?(socket, nick)
@@ -38,7 +38,7 @@ def irc(irc_socket)
     if line.include? "001"
       server_id = %r{:(.*) 001}.match(line)
       puts server_id
-      @@server = server_id[1]
+      $server = server_id[1]
       identify irc_socket, NICKSERV_PASS
       INIT_CHANNELS.each {|chan| irc_socket.puts "JOIN #{chan}"}
       break
@@ -48,7 +48,7 @@ def irc(irc_socket)
   rgen = Random.new(Time.now.nsec)
 
   #puts output and parses messages
-  while line = @@socket_mutex.synchronize{irc_socket.gets.strip}
+  while line = $socket_mutex.synchronize{irc_socket.gets.strip}
     tsputs line
     #if connection fails
     if %r{^ERROR :Closing Link:}.match(line) != nil
@@ -58,11 +58,11 @@ def irc(irc_socket)
     @last_ping = Time.now #used in spawner
     #listen for a respond to pings
     if %r{^PING}.match(line) != nil
-      server = line.split(':')[1]
-      pong irc_socket, server
+      pingserver = line.split(':')[1]
+      pong irc_socket, pingserver
       next
     end
-    if %r{^:#{@@server}}.match(line) != nil #server message
+    if %r{^:#{$server}}.match(line) != nil #server message
       next
     elsif %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG}.match(line) != nil #chat message
       #extract nick
@@ -138,7 +138,7 @@ def irc(irc_socket)
         if Commands.respond_to? command
           exec = true #because mutex are hard
           if AUTH_COMMANDS.include? command
-            if !@@socket_mutex.synchronize{identified? irc_socket, nick} #have to do this here or else while loop will lock before the thread can
+            if !$socket_mutex.synchronize{identified? irc_socket, nick} #have to do this here or else while loop will lock before the thread can
               exec = false
             end
           end
