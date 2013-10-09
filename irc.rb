@@ -67,8 +67,8 @@ def irc(irc_socket)
     elsif (linereg = %r{^:(guest_\w+)!~?\w+@[\w\.\-]+ JOIN :(#tacs)}.match(line)) != nil
       user = linereg[1]
       chan = linereg[2]
-      tsputs "SEND: PRIVMSG #{chan} :Howdy, #{user}. Note that these are real people in here, so it might take a few minutes to get a reply.  Stick around if you want a response."
-      irc_socket.puts "PRIVMSG #{chan} :Howdy, #{user}. Note that these are real people in here, so it might take a few minutes to get a reply.  Stick around if you want a response."
+      tsputs "SEND: PRIVMSG #{chan} :Howdy, #{user}. Note that these are real people in here, so it might take a few minutes to get a reply. Stick around if you want a response."
+      irc_socket.puts "PRIVMSG #{chan} :Howdy, #{user}. Note that these are real people in here, so it might take a few minutes to get a reply. Stick around if you want a response."
     elsif %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG}.match(line) != nil #chat message
       #extract nick
       index = line.index(':') + 1
