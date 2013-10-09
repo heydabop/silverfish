@@ -64,7 +64,7 @@ def irc(irc_socket)
     end
     if %r{^:#{@server}}.match(line) != nil #server message
       next
-    elsif (linereg = %r{^:(guest_\w+)!~?\w+@[\w\.\-]+ JOIN :(#tacs)}.match(line)) != nil
+    elsif (linereg = %r{^:(\w+)!~?\w+@[\w\.\-]+?\.mibbit\.com JOIN :(#tacs)}.match(line)) != nil
       user = linereg[1]
       chan = linereg[2]
       tsputs "SEND: PRIVMSG #{chan} :Howdy, #{user}. Note that these are real people in here, so it might take a few minutes to get a reply. Stick around if you want a response."
