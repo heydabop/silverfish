@@ -157,6 +157,12 @@ def irc(irc_socket)
           irc_socket.puts "NOTICE #{nick} :#{command} is not a valid command."
         end
       end
+      if (linereg = %r{^:(\w+)!~?\w+@[\w\.\-]+ JOIN :(#tacs)}.match(line) != nil)
+        user = linereg[1]
+        chan = linereg[2]
+        tsputs "SEND: PRIVMSG #{chan} : Howdy, #{user}, note that if you ask a question it could easily take 5-10 minutes before someone replies. If you want a response, don't leave."
+        irc_socket.puts "PRIVMSG #{chan} : Howdy, #{user}, note that if you ask a question it could easily take 5-10 minutes before someone replies. If you want a response, don't leave."
+      end
     end
   end
 end
