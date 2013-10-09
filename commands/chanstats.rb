@@ -5,6 +5,6 @@ def Commands.chanstats(socket, nick, channel, args)
     return
   end
   chanurl = channel[1..channel.length]
-  tsputs "SEND: PRIVMSG #{channel} :https://0xsilverfish.com/irc/#{chanurl}/"  
-  socket.puts "PRIVMSG #{channel} :https://0xsilverfish.com/irc/#{chanurl}/"
+  tsputs "SEND: PRIVMSG #{channel} :http://0xsilverfish.com/irc/#{chanurl}/"  
+  socket.puts "PRIVMSG #{channel} :http://0xsilverfish.com/irc/#{chanurl}/"
 end
