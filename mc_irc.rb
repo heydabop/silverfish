@@ -10,25 +10,25 @@ def mc_irc irc_socket
       message = message[2].strip
       tsputs "SEND: PRIVMSG #minecraft :#{nick} #{message}"
       begin
-        irc_socket.puts "PRIVMSG #minecraft :#{nick} #{message}"
+        irc_socket.puts "PRIVMSG #onlyminecraft :#{nick} #{message}"
       rescue IOError => e
         puts e.message
         puts e.backtrace.inspect
       end
-    elsif (nick = %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] (\w{,16})\[/[.:0-9]*\] logged in with entity id}.match(log_line)) != nil #join
+    elsif (nick = %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] (\w{,16}) joined the game}.match(log_line)) != nil #join
       nick = nick[1]
-      tsputs "SEND: NOTICE #minecraft :#{nick} has joined"
+      tsputs "SEND: NOTICE #onlyminecraft :#{nick} has joined"
       begin
-        irc_socket.puts "NOTICE #minecraft :#{nick} has joined"
+        irc_socket.puts "NOTICE #onlyminecraft :#{nick} has joined"
       rescue IOError => e
         puts e.message
         puts e.backtrace.inspect
       end
-    elsif (nick = %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] (\w{,16}) lost connection}.match(log_line)) != nil #quit
+    elsif (nick = %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] (\w{,16}) left the game}.match(log_line)) != nil #join
       nick = nick[1]
-      tsputs "SEND: NOTICE #minecraft :#{nick} has disconnected"
+      tsputs "SEND: NOTICE #onlyminecraft :#{nick} has disconnected"
       begin
-        irc_socket.puts "NOTICE #minecraft :#{nick} has disconnected"
+        irc_socket.puts "NOTICE #onlyminecraft :#{nick} has disconnected"
       rescue IOError => e
         puts e.message
         puts e.backtrace.inspect
@@ -37,9 +37,9 @@ def mc_irc irc_socket
       death_types.each {|death|
         if (message = %r{^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[INFO\] (#{death}.*)}.match(log_line)) != nil
          message = message[1].strip
-         tsputs "SEND: NOTICE #minecraft :#{message}"
+         tsputs "SEND: NOTICE #onlyminecraft :#{message}"
          begin
-           irc_socket.puts "NOTICE #minecraft :#{message}"
+           irc_socket.puts "NOTICE #onlyminecraft :#{message}"
          rescue IOError => e
            puts e.message
            puts e.backtrace.inspect
@@ -49,5 +49,6 @@ def mc_irc irc_socket
       }
     end
   end
+  sleep
 end
 
