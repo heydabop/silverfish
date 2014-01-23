@@ -104,9 +104,12 @@ def irc(irc_socket)
       #   end
       # end
       #listen for commands via command prefix char, PM, or mention
-      if (linereg = %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{chan} :#{RCOMMAND_PREFIX}(.*)}.match(line)) != nil \
-        || (linereg = %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{NICKNAME} :\s*(.*)}.match(line)) != nil \
-        || (linereg = %r{^:\w+!~?\w+@[\w\.\-]+ PRIVMSG #{chan} :#{NICKNAME}\W?\s*(.*)}.match(line)) != nil
+      if (linereg = %r{^:\w+!~?\w+@[\w\.\-\\]+ PRIVMSG #{chan} :#{RCOMMAND_PREFIX}(.*)}.match(line)) != nil \
+        || (linereg = %r{^:\w+!~?\w+@[\w\.\-\\]+ PRIVMSG #{NICKNAME} :\s*(.*)}.match(line)) != nil \
+        || (linereg = %r{^:\w+!~?\w+@[\w\.\-\\]+ PRIVMSG #{chan} :#{NICKNAME}\W?\s*(.*)}.match(line)) != nil
+        if (linereg[1].empty?)
+          next
+        end
         #extract command and args
         if chan == NICKNAME #is a PM
           chan = nick #respond with PM
