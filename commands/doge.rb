@@ -7,7 +7,7 @@ def Commands.doge(socket, nick, channel, args)
     end
   end
  b = 100000000.0
-  message = %Q(DOGE/LTC 24hr HI: \u0141#{ticker["rate_max"] / b} - 24hr LOW: \u0141#{ticker["rate_min"] / b} - Last: \u0141#{ticker["last_price"] / b})
+  message = %Q(DOGE/LTC 24hr HI: \u0141#{ticker["rate_max"] / b} \u2014 24hr LOW: \u0141#{ticker["rate_min"] / b} \u2014 Last: \u0141#{ticker["last_price"] / b})
   tsputs "SEND: PRIVMSG #{channel} :#{message}"
   socket.puts "PRIVMSG #{channel} :#{message}"
 end
