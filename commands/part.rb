@@ -1,4 +1,7 @@
 def Commands.part(socket, nick, channel, args)
+  if args.length == 0
+    args.push(channel)
+  end
   if AUTH_USERS.include?(nick)
     for chan in args
       tsputs "SEND: PART #{chan}"
